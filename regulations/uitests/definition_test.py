@@ -16,6 +16,7 @@ class DefinitionTest(BaseTest, unittest.TestCase):
         html = self.driver.find_element_by_tag_name('html')
         WebDriverWait(self.driver, 30).until(
             lambda driver: 'selenium-start' in html.get_attribute('class'))
+        self.driver.find_element_by_id('panel-link').click()    # open ToC
 
     def test_definition(self):
         self.driver.find_element_by_id('nav-1005-1').click()
