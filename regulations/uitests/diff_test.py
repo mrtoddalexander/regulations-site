@@ -91,9 +91,7 @@ class DiffTest(BaseTest, unittest.TestCase):
 
         # go back into diff pane in drawer, stop comparing
         self.get_drawer_button().click()
-        stop_button = self.driver.find_element_by_xpath(
-            '//*[@id="timeline"]/div[2]/ul/li[2]/div/a')
-        stop_button.click()
+        self.driver.find_element_by_link_text('Stop Comparing').click()
 
         # make sure it goes back to the right place
         WebDriverWait(self.driver, 30).until(

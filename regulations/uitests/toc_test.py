@@ -22,8 +22,7 @@ class TOCTest(BaseTest, unittest.TestCase):
         # toggle arrow should switch
         self.assertTrue(drawer_toggle.get_attribute('class').find('open'))
 
-        toc_link_1005_1 = self.driver.find_element_by_xpath(
-            '//*[@id="toc"]/ol/li[1]/a')
+        toc_link_1005_1 = self.driver.find_element_by_id('nav-1005-1')
         # toc link should have the proper section id attr
         self.assertEqual(toc_link_1005_1.get_attribute('data-section-id'),
                          '1005-1')
