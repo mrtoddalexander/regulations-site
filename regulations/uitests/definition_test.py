@@ -10,6 +10,7 @@ class DefinitionTest(BaseTest, unittest.TestCase):
     job_name = 'Definitions test'
 
     def setUp(self):
+        super(DefinitionTest, self).setUp()
         self.driver.set_window_size(1024, 600)
         self.driver.get(self.test_url + '/1005')
         html = self.driver.find_element_by_tag_name('html')
