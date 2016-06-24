@@ -29,9 +29,9 @@ class TOCTest(BaseTest, unittest.TestCase):
         toc_link_1005_1.click()
 
         # reg section should load in content area
-        self.assertTrue(
-            'catharine and myriads'
-            in self.driver.find_element_by_class_name('section-title').text)
+        self.assertIn(
+            'Authority and purpose',
+            self.driver.find_element_by_class_name('section-title').text)
 
         # toc link should be highlighted
         self.assertTrue('current' in toc_link_1005_1.get_attribute('class'))
