@@ -4,39 +4,39 @@ import unittest
 from selenium.webdriver.support.ui import WebDriverWait
 
 from regulations.uitests.base_test import BaseTest
-from regulations.uitests import utils
 
 
 class DefinitionTest(BaseTest, unittest.TestCase):
-
     job_name = 'Definitions test'
 
-    def test_definition(self):
+    def setUp(self):
         self.driver.set_window_size(1024, 600)
-        self.driver.get(self.test_url + '/1005-1/2012-12121')
+        self.driver.get(self.test_url + '/1005')
         html = self.driver.find_element_by_tag_name('html')
         WebDriverWait(self.driver, 30).until(
             lambda driver: 'selenium-start' in html.get_attribute('class'))
-        definition_link = self.driver.find_element_by_xpath(
-            '//*[@id="1005-1-a"]//a')
+
+    def test_definition(self):
+        self.driver.find_element_by_id('nav-1005-1').click()
+        p = self.driver.find_element_by_id('1005-1-a')
+        definition_link = p.find_element_by_link_text('Consumer')
         # term link should have correct data attr
-        self.assertIn(
-            '1005-2-a-1', definition_link.get_attribute('data-definition'))
+        self.assertEqual(
+            '1005-2-e', definition_link.get_attribute('data-definition'))
 
         definition_link.click()
 
         # term link should get active class
         self.assertIn('active', definition_link.get_attribute('class'))
 
-        definition = self.driver.find_element_by_xpath('//*[@id="1005-2-a-1"]')
-        definition_close_button = self.driver.find_element_by_xpath(
-            '//*[@id="1005-2-a-1"]/div[1]/h4/a')
+        definition = self.driver.find_element_by_id('1005-2-e')
+        definition_close_button = definition.find_element_by_link_text(
+            "Close definition")
 
         # definition should appear in sidebar
         self.assertGreater(len(definition.text), 20)
-        definition_term = self.driver.find_element_by_xpath(
-            '//*[@id="1005-2-a-1"]/div[3]/p/dfn')
-        self.assertIn(u'\u201cvoided tosser\u201d', definition_term.text)
+        definition_term = definition.find_element_by_xpath('.//dfn')
+        self.assertEqual(u'“Consumer”', definition_term.text)
 
         definition_close_button.click()
         # definition should close
@@ -45,40 +45,38 @@ class DefinitionTest(BaseTest, unittest.TestCase):
         definition_link.click()
 
         # continue link should load full def
-        definition_cont_link = self.driver.find_element_by_xpath(
-            '//*[@id="1005-2-a-1"]/div[3]/a[1]')
-        definition_cont_link.click()
+        definition.find_element_by_link_text(u'§ 1005.2(e)').click()
         WebDriverWait(self.driver, 30).until(
-            lambda driver: driver.find_element_by_xpath('//*[@id="1005-2"]'))
+            lambda driver: driver.find_element_by_id('1005-2'))
 
-        # test definition scope notifications
-        toc_toggle = self.driver.find_element_by_css_selector('#panel-link')
-        toc_toggle.click()
+    def test_definition_scope_notification(self):
+        """Definitions can vary by subpart; when they do, we should receive a
+        notification"""
+        self.driver.find_element_by_id('nav-1005-11').click()
 
-        toc_1005_3 = self.driver.find_element_by_xpath(
-            '//*[@id="toc"]/ol/li[3]/a')
-        toc_1005_3.click()
-
-        # close toc
-        toc_toggle.click()
-
-        # load 1005.3, open definition
-        new_definition_link = self.driver.find_element_by_xpath(
-            '//*[@id="1005-3-a"]//a[1]')
+        p = self.driver.find_element_by_id('1005-11-b-2')
+        new_definition_link = p.find_element_by_link_text('business days')
         self.driver.execute_script('window.scrollTo(0, 0);')
         new_definition_link.click()
-        self.driver.find_element_by_xpath('//*[@id="1005-2-b-1"]')
+        self.driver.find_element_by_id('1005-2-d')
 
-        # navigate back to 1005.1
-        toc_toggle.click()
-        self.driver.find_element_by_xpath('//*[@id="toc"]/ol/li[1]/a').click()
+        # navigate to a different subpart
+        self.driver.find_element_by_id('nav-1005-30').click()
 
         # make sure that the scope notice displays
-        self.driver.find_element_by_xpath('//*[@id="1005-2-b-1"]/div[2]/div')
+        warning = self.driver.find_element_by_class_name('definition-warning')
+        self.assertTrue(warning.is_displayed())
 
-        # go to 1005-1-a
-        toc_toggle.click()
-        utils.scroll_to(self.driver, '#1005-1-a')
+    def test_definition_scope_load(self):
+        """If a definition has a different scope, we _may_ be able to find the
+        replacement"""
+        self.driver.find_element_by_id('nav-1005-8').click()
+
+        p = self.driver.find_element_by_id('1005-8-b')
+        p.find_element_by_link_text('Error').click()
+
+        # Navigate to a section with a different definition of error
+        self.driver.find_element_by_id('nav-1005-33').click()
 
         definition_update_link = self.driver.find_element_by_css_selector(
             '.update-definition')
@@ -91,5 +89,4 @@ class DefinitionTest(BaseTest, unittest.TestCase):
         # load in scope definition
         definition_update_link.click()
         WebDriverWait(self.driver, 10).until(
-            lambda driver: driver.find_element_by_xpath(
-                '//*[@id="1005-2-a-1"]'))
+            lambda driver: driver.find_element_by_id('1005-33-a-1'))
