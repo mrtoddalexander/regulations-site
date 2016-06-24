@@ -39,8 +39,7 @@ class TOCTest(BaseTest, unittest.TestCase):
         WebDriverWait(self.driver, 90)
 
         # test another section
-        toc_link_1005_3 = self.driver.find_element_by_xpath(
-            '//*[@id="toc"]/ol/li[3]/a')
+        toc_link_1005_3 = self.driver.find_element_by_id('nav-1005-3')
         self.assertEquals(toc_link_1005_3.get_attribute('data-section-id'),
                           '1005-3')
 
