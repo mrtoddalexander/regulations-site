@@ -82,8 +82,10 @@ class DefinitionTest(BaseTest, unittest.TestCase):
         p = self.driver.find_element_by_id('1005-8-b')
         p.find_element_by_link_text('Error').click()
 
+        WebDriverWait(self.driver, 10)
         # Navigate to a section with a different definition of error
         self.toc_nav('1005-33')
+        WebDriverWait(self.driver, 10)
 
         definition_update_link = self.driver.find_element_by_css_selector(
             '.update-definition')
