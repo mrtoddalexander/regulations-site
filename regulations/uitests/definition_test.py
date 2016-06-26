@@ -17,11 +17,14 @@ class DefinitionTest(BaseTest, unittest.TestCase):
         WebDriverWait(self.driver, 30).until(
             lambda driver: 'selenium-start' in html.get_attribute('class'))
 
-    def toggle_toc(self):
+    def toc_nav(self, label_id):
         self.driver.find_element_by_id('panel-link').click()    # open ToC
+        self.driver.find_element_by_id('nav-{}'.format(label_id)).click()
+        self.driver.find_element_by_id('panel-link').click()    # close ToC
 
     def test_definition(self):
-        self.driver.find_element_by_id('nav-1005-1').click()
+        self.toc_nav('1005-1')
+
         p = self.driver.find_element_by_id('1005-1-a')
         definition_link = p.find_element_by_link_text('Consumer')
         # term link should have correct data attr
@@ -56,7 +59,7 @@ class DefinitionTest(BaseTest, unittest.TestCase):
     def test_definition_scope_notification(self):
         """Definitions can vary by subpart; when they do, we should receive a
         notification"""
-        self.driver.find_element_by_id('nav-1005-11').click()
+        self.toc_nav('1005-11')
 
         p = self.driver.find_element_by_id('1005-11-b-2')
         new_definition_link = p.find_element_by_link_text('business days')
@@ -65,7 +68,7 @@ class DefinitionTest(BaseTest, unittest.TestCase):
         self.driver.find_element_by_id('1005-2-d')
 
         # navigate to a different subpart
-        self.driver.find_element_by_id('nav-1005-30').click()
+        self.toc_nav('1005-30')
 
         # make sure that the scope notice displays
         warning = self.driver.find_element_by_class_name('definition-warning')
@@ -74,13 +77,13 @@ class DefinitionTest(BaseTest, unittest.TestCase):
     def test_definition_scope_load(self):
         """If a definition has a different scope, we _may_ be able to find the
         replacement"""
-        self.driver.find_element_by_id('nav-1005-8').click()
+        self.toc_nav('1005-8')
 
         p = self.driver.find_element_by_id('1005-8-b')
         p.find_element_by_link_text('Error').click()
 
         # Navigate to a section with a different definition of error
-        self.driver.find_element_by_id('nav-1005-33').click()
+        self.toc_nav('1005-33')
 
         definition_update_link = self.driver.find_element_by_css_selector(
             '.update-definition')
