@@ -37,8 +37,8 @@ class DefinitionTest(BaseTest, unittest.TestCase):
         self.assertIn('active', definition_link.get_attribute('class'))
 
         definition = self.driver.find_element_by_id('1005-2-e')
-        definition_close_button = definition.find_element_by_link_text(
-            "Close definition")
+        definition_close_button = definition.find_element_by_css_selector(
+            'h4 a')
 
         # definition should appear in sidebar
         self.assertGreater(len(definition.text), 20)
