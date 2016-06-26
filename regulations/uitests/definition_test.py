@@ -85,6 +85,9 @@ class DefinitionTest(BaseTest, unittest.TestCase):
         # Navigate to a section with a different definition of error
         self.toc_nav('1005-33')
 
+        print(self.driver.find_element_by_id('1005-11-a-1').get_attribute(
+            'innerHTML'))
+
         definition_update_link = self.driver.find_element_by_class_name(
             'update-definition')
         definition_text = self.driver.find_element_by_class_name(
