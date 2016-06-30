@@ -52,6 +52,7 @@ class DefinitionTest(BaseTest, unittest.TestCase):
         definition_link.click()
 
         # continue link should load full def
+        definition = self.driver.find_element_by_id('1005-2-e')
         definition.find_element_by_link_text(u'§ 1005.2(e)').click()
         WebDriverWait(self.driver, 30).until(
             lambda driver: driver.find_element_by_id('1005-2'))
@@ -85,7 +86,7 @@ class DefinitionTest(BaseTest, unittest.TestCase):
         # Navigate to a section with a different definition of error
         self.toc_nav('1005-33')
 
-        self.driver.execute_script('window.scrollTo(100, 0);')
+        self.driver.execute_script('window.scrollTo(100, 100);')
         print(self.driver.find_element_by_id('1005-11-a-1').get_attribute(
             'innerHTML'))
 
