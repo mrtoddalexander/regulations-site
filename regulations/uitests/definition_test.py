@@ -86,9 +86,8 @@ class DefinitionTest(BaseTest, unittest.TestCase):
         # Navigate to a section with a different definition of error
         self.toc_nav('1005-33')
 
-        self.driver.execute_script('window.scrollTo(100, 100);')
-        print(self.driver.find_element_by_id('1005-11-a-1').get_attribute(
-            'innerHTML'))
+        # Scroll a bit to trigger definition review
+        self.driver.execute_script('window.scrollTo(0, 100);')
 
         definition_update_link = self.driver.find_element_by_class_name(
             'update-definition')
