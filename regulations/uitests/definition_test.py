@@ -42,8 +42,8 @@ class DefinitionTest(BaseTest, unittest.TestCase):
 
         # definition should appear in sidebar
         self.assertGreater(len(definition.text), 20)
-        definition_term = definition.find_element_by_xpath('.//dfn')
-        self.assertEqual(u'“Consumer”', definition_term.text)
+        definition_term = definition.find_element_by_tag_name('dfn')
+        self.assertEqual('Consumer', definition_term.text)
 
         definition_close_button.click()
         # definition should close
@@ -85,7 +85,7 @@ class DefinitionTest(BaseTest, unittest.TestCase):
         # Navigate to a section with a different definition of error
         self.toc_nav('1005-33')
 
-        self.driver.execute_script('window.scrollTo(0, 0);')
+        self.driver.execute_script('window.scrollTo(100, 0);')
         print(self.driver.find_element_by_id('1005-11-a-1').get_attribute(
             'innerHTML'))
 
