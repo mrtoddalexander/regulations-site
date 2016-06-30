@@ -80,6 +80,8 @@ class DefinitionTest(BaseTest, unittest.TestCase):
         replacement"""
         self.toc_nav('1005-8')
 
+        html = self.driver.find_element_by_tag_name('html')
+        print(html.get_attribute('innerHTML'))
         p = self.driver.find_element_by_id('1005-8-b')
         p.find_element_by_link_text('Error').click()
 
